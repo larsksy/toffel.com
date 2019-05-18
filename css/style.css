@@ -15,21 +15,21 @@ html,body {
 }
 
 body {
-    background-image: url(bakgrunn.jpg);
-    -webkit-animation-name: example;
-    animation-name: example;
-    background-repeat: repeat;
-    animation: example 10s linear infinite;
+    background: #ffffff url(bakgrunn.jpg) repeat ;
+    background-size: 25rem;
+    -webkit-animation-name: scrollInfinite;
+    animation-name: scrollInfinite;
+    animation: scrollInfinite 7999999s linear infinite;
 }
 
 
-@-webkit-keyframes example {
+@-webkit-keyframes scrollInfinite {
     from {background-position: 0 0;}
-    to {background-position: 0 100%;}
+    to {background-position: 0 99999999%;}
 }
 
 /* Standard syntax */
-@keyframes example {
+@keyframes scrollInfinite {
     from {background-position: 0 0;}
-    to {background-position: 0 100%;}
+    to {background-position: 0 99999999%;}
 }
