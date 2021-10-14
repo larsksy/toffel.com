@@ -1,39 +1,39 @@
 $(document).ready(function () {
+    $(document).on('click','body *',function(){
+        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let audioElement = document.getElementById('audioElement');
+        let audioSrc = audioCtx.createMediaElementSource(audioElement);
+        let analyser = audioCtx.createAnalyser();
 
-  var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  var audioElement = document.getElementById('audioElement');
-  var audioSrc = audioCtx.createMediaElementSource(audioElement);
-  var analyser = audioCtx.createAnalyser();
+        // Bind our analyser to the media element source.
+        audioSrc.connect(analyser);
+        audioSrc.connect(audioCtx.destination);
 
-  // Bind our analyser to the media element source.
-  audioSrc.connect(analyser);
-  audioSrc.connect(audioCtx.destination);
+        //var frequencyData = new Uint8Array(analyser.frequencyBinCount);
+        let frequencyData = new Uint8Array(200);
+        audioElement.play();
 
-  //var frequencyData = new Uint8Array(analyser.frequencyBinCount);
-  var frequencyData = new Uint8Array(200);
-  audioElement.play();
+        function renderChart() {
+            requestAnimationFrame(renderChart);
 
-  function renderChart() {
-     requestAnimationFrame(renderChart);
+            // Copy frequency data to frequencyData array.
+            analyser.getByteFrequencyData(frequencyData);
 
-     // Copy frequency data to frequencyData array.
-     analyser.getByteFrequencyData(frequencyData);
+            // Update d3 chart with new data.
+            let img = document.getElementById('toffel');
+            let sum = 0;
+            let k = frequencyData.length;
+            for(let i = 0; i < frequencyData.length;i++){
+                sum += frequencyData[i]*k/frequencyData.length;
+                k = k - 1;
 
-     // Update d3 chart with new data.
-     var img = document.getElementById('toffel');
-     var sum = 0;
-     var k = frequencyData.length;
-     for(var i = 0; i < frequencyData.length;i++){
-       sum += frequencyData[i]*k/frequencyData.length;
-       k = k - 1;
+            }
+            let avg = sum/frequencyData.length;
+            img.style.width = String(avg*7) + "px";
 
-     }
-     var avg = sum/frequencyData.length;
-     img.style.width = String(avg*0.9+350) + "px";
+        }
 
-  }
-
-  // Run the loop
-  renderChart();
-
+        // Run the loop
+        renderChart();
+    });
 })
